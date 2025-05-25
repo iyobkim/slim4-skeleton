@@ -2,6 +2,9 @@
 
 use App\Middleware\ExceptionMiddleware;
 use App\Renderer\JsonRenderer;
+use Illuminate\Container\Container as IlluminateContainer;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
@@ -13,7 +16,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Log\LoggerInterface;
-use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteParserInterface;
@@ -60,10 +62,6 @@ return [
         return $container->get(App::class)->getRouteCollector()->getRouteParser();
     },
 
-    BasePathMiddleware::class => function (ContainerInterface $container) {
-        return new BasePathMiddleware($container->get(App::class));
-    },
-
     LoggerInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['logger'];
         $logger = new Logger('app');
@@ -86,5 +84,21 @@ return [
             $container->get(LoggerInterface::class),
             (bool)$settings['display_error_details'],
         );
+    },
+
+    // Database connection
+    Connection::class => function (ContainerInterface $container) {
+        $factory = new ConnectionFactory(new IlluminateContainer());
+
+        $connection = $factory->make($container->get('settings')['db']);
+
+        // Disable the query log to prevent memory issues
+        $connection->disableQueryLog();
+
+        return $connection;
+    },
+
+    PDO::class => function (ContainerInterface $container) {
+        return $container->get(Connection::class)->getPdo();
     },
 ];

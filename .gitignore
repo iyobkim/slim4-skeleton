@@ -1,7 +1,7 @@
 .idea/
 nbproject/
 composer.phar
-composer.lock
+# composer.lock
 .DS_STORE
 cache.properties
 .php_cs.cache
@@ -9,7 +9,7 @@ cache.properties
 .phpunit.result.cache
 .phpunit.cache/
 phpunit.xml.bak
-package-lock.json
+# package-lock.json
 
 # keys
 *.pem
@@ -63,3 +63,4 @@ logs/*
 public/assets/*
 !public/assets/.htaccess
 
+*.sqlite
