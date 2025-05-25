@@ -37,19 +37,31 @@ $settings['db'] = [
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',
-    // PDO options
     'options' => [
         PDO::ATTR_PERSISTENT => false,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_EMULATE_PREPARES => true,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci',
     ],
 ];
+if ($settings['db']['dirver'] === 'mysql') {
+    $settings['db']['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci';
+}
 
 // Latte
 $settings['template'] = __DIR__ . '/../resources/views';
 $settings['template_temp'] = __DIR__ . '/../tmp/views';
 $settings['template_auto_refresh'] = true;
+
+// Session
+$settings['session'] = [
+    'name' => 'app',
+    'lifetime' => 7200,
+    'path' => null,
+    'domain' => null,
+    'secure' => false,
+    'httponly' => true,
+    'cache_limiter' => 'nocache',
+];
 
 return $settings;

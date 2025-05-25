@@ -1,0 +1,10 @@
+{* flash messages *}
+{foreach messages('errors') ?? [] as $message}
+{first}
+    <ul class="is-error">
+{/first}
+        <li>{$message}</li>
+{last}
+    </ul>
+{/last}
+{/foreach}

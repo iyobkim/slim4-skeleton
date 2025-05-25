@@ -33,6 +33,14 @@ textarea#body {
   min-height: 15rem;
 }
 
+.is-error {
+  background-color: var(--pico-card-background-color);
+  border-radius: 0.2rem;
+}
+.is-error li {
+  color: rgb(183.25, 63.5, 59);
+}
+
 @media (max-width: 768px) {
   .sections-wrapper {
     grid-template-columns: none;

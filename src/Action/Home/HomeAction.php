@@ -8,9 +8,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class HomeAction
 {
-    public function __construct(private TemplateRenderer $renderer)
-    {
-        $this->renderer = $renderer;
+    public function __construct(
+        private TemplateRenderer $renderer,
+    ) {
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface

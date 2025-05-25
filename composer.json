@@ -12,6 +12,7 @@
     "require": {
         "php": "8.2.* || 8.3.* || 8.4.*",
         "ext-json": "*",
+        "akrabat/rka-slim-session-middleware": "^3.0",
         "fig/http-message-util": "^1.1",
         "illuminate/database": "^12.15",
         "latte/latte": "^3.0",
@@ -19,6 +20,7 @@
         "nyholm/psr7": "^1.8.1",
         "nyholm/psr7-server": "^1.1",
         "php-di/php-di": "^7",
+        "slim/flash": "^0.4.0",
         "slim/slim": "^4"
     },
     "require-dev": {

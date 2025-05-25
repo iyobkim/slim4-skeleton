@@ -18,8 +18,11 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Log\LoggerInterface;
+use RKA\Session;
+use RKA\SessionMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Flash\Messages;
 use Slim\Interfaces\RouteParserInterface;
 
 return [
@@ -112,6 +115,31 @@ return [
         $latte->setTempDirectory($settings['template_temp']);
         $latte->setAutoRefresh($settings['template_auto_refresh']);
 
+        // Simple helper function
+        $latte->addFunction('messages', function (string $key) use ($container) {
+            $flash = $container->get(Messages::class);
+
+            return $flash->getMessage($key);
+        });
+
         return $latte;
+    },
+
+    // Session
+    SessionMiddleware::class => function (ContainerInterface $container) {
+        $options = $container->get('settings')['session'];
+
+        return new SessionMiddleware($options);
+    },
+
+    Session::class => function () {
+        return new Session();
+    },
+
+    // Flash messages
+    Messages::class => function () {
+        $storage = [];
+
+        return new Messages($storage);
     },
 ];
