@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 use RKA\Session;
 use RKA\SessionMiddleware;
 use Slim\App;
+use Slim\Csrf\Guard;
 use Slim\Factory\AppFactory;
 use Slim\Flash\Messages;
 use Slim\Interfaces\RouteParserInterface;
@@ -115,11 +116,23 @@ return [
         $latte->setTempDirectory($settings['template_temp']);
         $latte->setAutoRefresh($settings['template_auto_refresh']);
 
-        // Simple helper function
+        // Add functions
         $latte->addFunction('messages', function (string $key) use ($container) {
             $flash = $container->get(Messages::class);
 
             return $flash->getMessage($key);
+        });
+
+        $latte->addFunction('csrf', function () use ($container) {
+            $csrf = $container->get(Guard::class);
+
+            return sprintf(
+                '<input type="hidden" name="%s" value="%s"><input type="hidden" name="%s" value="%s">',
+                $csrf->getTokenNameKey(),
+                $csrf->getTokenName(),
+                $csrf->getTokenValueKey(),
+                $csrf->getTokenValue(),
+            );
         });
 
         return $latte;
@@ -141,5 +154,10 @@ return [
         $storage = [];
 
         return new Messages($storage);
+    },
+
+    // CSRF
+    Guard::class => function (ContainerInterface $container) {
+        return new Guard($container->get(ResponseFactoryInterface::class));
     },
 ];
