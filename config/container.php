@@ -5,6 +5,8 @@ use App\Renderer\JsonRenderer;
 use Illuminate\Container\Container as IlluminateContainer;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Connectors\ConnectionFactory;
+use Latte\Engine;
+use Latte\Loaders\FileLoader;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
@@ -100,5 +102,16 @@ return [
 
     PDO::class => function (ContainerInterface $container) {
         return $container->get(Connection::class)->getPdo();
+    },
+
+    // Latte template
+    Engine::class => function (ContainerInterface $container) {
+        $latte = new Engine();
+        $settings = $container->get('settings');
+        $latte->setLoader(new FileLoader($settings['template']));
+        $latte->setTempDirectory($settings['template_temp']);
+        $latte->setAutoRefresh($settings['template_auto_refresh']);
+
+        return $latte;
     },
 ];

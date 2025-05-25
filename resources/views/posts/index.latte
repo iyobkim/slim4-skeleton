@@ -1,0 +1,39 @@
+{extends '../layout.latte'}
+
+{block title}Posts{/block}
+
+{block content}
+<div class="grid sections-wrapper">
+    {* flash messages *}
+    <section>
+        <h1>Posts</h1>
+        {foreach $posts as $post}
+            <article>
+                <header><a href="#">{$post->title}</a></header>
+                <figure>
+                    <img class="thumbnail" src="/img/mountain.jpg" alt="">
+                </figure>
+                {$post->body|truncate:150,'...'}
+                <footer>
+                    <a href="#">{$post->author}</a>, <a href="#">{$post->category|capitalize}</a> _ <a href="#">tag1</a>, <a href="#">tag2</a>
+                    <span class="written">{$post->published_at}</span>
+                    {* <a href="#">Edit</a>
+                    <a href="#">Delete</a> *}
+                </footer>
+            </article>
+        {/foreach}
+        {* pagination *}
+    </section>
+
+    <aside>
+        <nav>
+            <h4>Favorite Posts</h4>
+            <ul>
+                <li><a href="#">post 1</a></li>
+                <li><a href="#">post 2</a></li>
+                <li><a href="#">post 3</a></li>
+            </ul>
+        </nav>
+    </aside>
+</div>
+{/block}

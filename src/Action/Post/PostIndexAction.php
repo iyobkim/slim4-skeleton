@@ -2,7 +2,7 @@
 
 namespace App\Action\Post;
 
-use App\Renderer\JsonRenderer;
+use App\Renderer\TemplateRenderer;
 use Illuminate\Database\Connection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,15 +10,23 @@ use Psr\Http\Message\ServerRequestInterface;
 final class PostIndexAction
 {
     public function __construct(
-        private JsonRenderer $renderer,
+        private TemplateRenderer $renderer,
         private Connection $connection,
     ) {
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $posts = $this->connection->table('posts')->latest()->limit(3)->get();
+        // TODO:
+        $posts = $this->connection->table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+            ->select('posts.*', 'users.name as author')
+            ->whereNotNull('published_at')
+            ->orderBy('created_at desc')
+            ->limit(3)
+            ->offset(3)
+            ->get();
 
-        return $this->renderer->json($response, compact('posts'));
+        return $this->renderer->template($response, 'posts/index.latte', compact('posts'));
     }
 }

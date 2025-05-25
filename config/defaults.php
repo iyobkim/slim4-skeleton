@@ -47,4 +47,9 @@ $settings['db'] = [
     ],
 ];
 
+// Latte
+$settings['template'] = __DIR__ . '/../resources/views';
+$settings['template_temp'] = __DIR__ . '/../tmp/views';
+$settings['template_auto_refresh'] = true;
+
 return $settings;
