@@ -13,6 +13,7 @@
         "php": "8.2.* || 8.3.* || 8.4.*",
         "ext-json": "*",
         "fig/http-message-util": "^1.1",
+        "illuminate/database": "^12.15",
         "monolog/monolog": "^3",
         "nyholm/psr7": "^1.8.1",
         "nyholm/psr7-server": "^1.1",
