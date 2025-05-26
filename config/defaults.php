@@ -8,7 +8,7 @@ ini_set('display_errors', '0');
 ini_set('display_startup_errors', '0');
 
 // Timezone
-date_default_timezone_set('Europe/Berlin');
+date_default_timezone_set('Asia/Seoul');
 
 $settings = [];
 
@@ -28,15 +28,20 @@ $settings['logger'] = [
 
 // Database settings
 $settings['db'] = [
+    'driver' => 'mysql',
     'host' => 'localhost',
-    'encoding' => 'utf8mb4',
+    'port' => 3306,
+    'database' => 'test',
+    'username' => 'root',
+    'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
-    // PDO options
+    'prefix' => '',
     'options' => [
         PDO::ATTR_PERSISTENT => false,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_EMULATE_PREPARES => true,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        // PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci',
     ],
 ];
 
